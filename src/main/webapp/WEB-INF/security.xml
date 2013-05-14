@@ -8,7 +8,7 @@
     <http pattern="/images/**" security="none"/>
     <http pattern="/styles/**" security="none"/>
     <http pattern="/scripts/**" security="none"/>
-    
+
     <http auto-config="true">
         <intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
         <intercept-url pattern="/passwordHint*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
