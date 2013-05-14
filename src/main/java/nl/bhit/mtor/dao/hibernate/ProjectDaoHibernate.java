@@ -1,5 +1,6 @@
 package nl.bhit.mtor.dao.hibernate;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import nl.bhit.mtor.model.MTorMessage;
 import nl.bhit.mtor.model.Project;
 import nl.bhit.mtor.model.User;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -56,4 +58,27 @@ public class ProjectDaoHibernate extends GenericDaoHibernate<Project, Long> impl
             project.setMessages(messges);
         }
     }
+
+	@Override
+	public List<Project> getSortedAndPaginatedList(String sortField, boolean ascOrder, Integer pageNumber, Integer pageSize) {
+		if (sortField == null) {
+			return null;
+		}
+		Field pField = FieldUtils.getDeclaredField(Project.class, sortField, true);
+		if (pField == null) {
+			return null;
+		}
+		
+		StringBuilder sbQuery = new StringBuilder("from Project as p order by p.");
+		sbQuery.append(sortField).append(" ").append(ascOrder ? "asc" : "desc");
+		Query query = getSession().createQuery(sbQuery.toString());
+		if (pageNumber != null && pageNumber >= 0 && pageSize != null && pageSize > 0) {
+			query.setMaxResults(pageSize);
+			query.setFirstResult(pageSize * pageNumber);
+		}
+		@SuppressWarnings("unchecked")
+		List<Project> page = query.list();
+		
+		return page;
+	}
 }

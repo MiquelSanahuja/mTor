@@ -34,8 +34,8 @@
 	function reloadProjectsTable() {
 		$.ajax({
 			tradional: true,
-			type: 'POST',
-			url: 'projectsList',
+			type: 'GET',
+			url: '/services/api/projects/table',
 			data: data,
 			timeout: TIME_5_SECONDS,
 			success: function(data) {
@@ -87,15 +87,15 @@
 				if (!$(this).parent().hasClass('sorted')) {
 					$(this).parent().addClass('sorted');
 				}
-				data = 'sortBy=' + $(this).text();
+				data = 'sortField=' + $(this).text().toLowerCase();
 				if ($(this).parent().hasClass('order1')) {
 					$(this).parent().removeClass('order1');
 					$(this).parent().addClass('order2');
-					data += '&sortOrder=asc';
+					data += '&ascOrder=true';
 				} else {
 					$(this).parent().removeClass('order2');
 					$(this).parent().addClass('order1');
-					data += '&sortOrder=desc';
+					data += '&ascOrder=false';
 				}
 				reloadProjectsTable();
 			});
@@ -132,7 +132,7 @@
 			</a>
 		</div>
 		
-		<s:url id="thisUrl"/>	
+		<s:url id="thisUrl"/>
 		<display:table 	id="projectList" name="projects" requestURI="${thisUrl}" 
 						class="table table-condensed table-striped table-hover"
 						export="true" pagesize="25" sort="list">
@@ -146,7 +146,7 @@
 			</security:authorize>
 			<display:column property="id" media="csv excel xml pdf" titleKey="project.id"/>
 			<display:column property="name" sortable="true" titleKey="project.name"/>
-			<display:column title="Status" sortable="true">
+			<display:column title="Status" sortable="false">
 				${projectList.statusOfProject()}
 			</display:column>  
 			<display:column sortable="false" title="Users">
