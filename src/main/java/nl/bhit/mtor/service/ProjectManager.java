@@ -40,7 +40,7 @@ public interface ProjectManager extends GenericManager<Project, Long> {
      * @param ascOrder
      * 				Flag indicates if it's an ascendent order. True for ascendent order. False for descendant order.
      * @param pageNumber
-     * 				Page number.
+     * 				Page number. Note that the first page will be index 0.
      * @param pageSize
      * 				Number of rows per page.
      * @return
